@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 50px;
+    }
+    .dashboard {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 600px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #007BFF;
+      color: white;
+    }
+    button {
+      padding: 5px 10px;
+      margin: 2px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    .editBtn { background-color: #28a745; }
+    .deleteBtn { background-color: #dc3545; }
+    .downloadBtn { background-color: #17a2b8; }
+    .topBtn {
+      display: inline-block;
+      width: 32%;
+      margin-bottom: 15px;
+      background-color: #007BFF;
+    }
+    .topBtn:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Welcome to Dashboard</h2>
+    <button class="topBtn" onclick="window.location.href='resume.html'">Create Resume</button>
+    <button class="topBtn" onclick="window.location.href='viewResume.html'">View Resume</button>
+    <button class="topBtn" onclick="logout()">Logout</button>
+
+    <h3>Your Resumes</h3>
+    <table id="resumesTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Education</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Resume rows will be populated dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Example: fetch resumes from localStorage or backend
+    const resumes = JSON.parse(localStorage.getItem("resumes") || "[]");
+
+    const tableBody = document.querySelector("#resumesTable tbody");
+
+    function renderTable() {
+      tableBody.innerHTML = "";
+      resumes.forEach((resume, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${resume.name}</td>
+          <td>${resume.email}</td>
+          <td>${resume.education}</td>
+          <td>
+            <button class="editBtn" onclick="editResume(${index})">Edit</button>
+            <button class="deleteBtn" onclick="deleteResume(${index})">Delete</button>
+            <button class="downloadBtn" onclick="downloadResumePDF(${index})">Download PDF</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function editResume(index) {
+      alert("Open resume form for editing: " + resumes[index].name);
+      // Optional: redirect to form page and pre-fill data
+    }
+
+    function deleteResume(index) {
+      if (confirm("Are you sure you want to delete this resume?")) {
+        resumes.splice(index, 1);
+        localStorage.setItem("resumes", JSON.stringify(resumes));
+        renderTable();
+      }
+    }
+
+    function downloadResumePDF(index) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const resume = resumes[index];
+
+      let yPos = 20;
+      doc.setFontSize(20);
+      doc.text("Resume", 105, yPos, null, null, "center");
+
+      yPos += 20;
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Name:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(resume.name, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Email:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(resume.email, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Education:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(resume.education, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Skills:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(resume.skills || "", 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Projects:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(resume.projects || "", 40, yPos);
+
+      doc.save(`${resume.name}_resume.pdf`);
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      alert("You have logged out!");
+      window.location.href = "login.html";
+    }
+
+    // Initial render
+    renderTable();
+  </script>
+</body>
+</html>

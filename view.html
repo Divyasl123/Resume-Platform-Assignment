@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Resume</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .resume-section {
+      margin-bottom: 15px;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    #downloadBtn {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    #downloadBtn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>My Resume</h1>
+
+  <div class="resume-section">
+    <div class="section-title">Name</div>
+    <div id="resumeName">Divya Suresh Lingadahalli</div>
+  </div>
+
+  <div class="resume-section">
+    <div class="section-title">Email</div>
+    <div id="resumeEmail">divyasl2332@gmail.com</div>
+  </div>
+
+  <div class="resume-section">
+    <div class="section-title">Education</div>
+    <div id="resumeEducation">B.Tech in Computer Science (IoT) at GM University</div>
+  </div>
+
+  <div class="resume-section">
+    <div class="section-title">Skills</div>
+    <div id="resumeSkills">C, Python, SQL, HTML, CSS, JavaScript</div>
+  </div>
+
+  <div class="resume-section">
+    <div class="section-title">Projects</div>
+    <div id="resumeProjects">
+      Students Attendance System, Restaurant Waitlist Manager, Women Safety Reporting Panel
+    </div>
+  </div>
+
+  <button id="downloadBtn" onclick="downloadPDF()">Download PDF</button>
+
+  <script>
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const name = document.getElementById("resumeName").innerText;
+      const email = document.getElementById("resumeEmail").innerText;
+      const education = document.getElementById("resumeEducation").innerText;
+      const skills = document.getElementById("resumeSkills").innerText;
+      const projects = document.getElementById("resumeProjects").innerText;
+
+      let yPos = 20;
+
+      doc.setFontSize(20);
+      doc.text("Resume", 105, yPos, null, null, "center");
+
+      yPos += 20;
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Name:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(name, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Email:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(email, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Education:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(education, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Skills:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(skills, 40, yPos);
+
+      yPos += 10;
+      doc.setFont("helvetica", "bold");
+      doc.text("Projects:", 10, yPos);
+      doc.setFont("helvetica", "normal");
+      doc.text(projects, 40, yPos);
+
+      doc.save("resume.pdf");
+    }
+  </script>
+
+</body>
+</html>
