@@ -11,7 +11,7 @@ The Resume Platform is a full-stack web application that allows users to create,
 - Dashboard: Edit, Delete, Download PDF
 - Download Resume as Styled PDF using jsPDF
 - Responsive Design for desktop and mobile
-- LocalStorage backend (optional Node.js/MongoDB/MySQL backend)
+
 
 
 
